@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}
+    {{ request.user.get_full_name }} - {% trans 'Update Profile' %}
+{% endblock %}
+
+{% block content %}
+    {% include 'base/header.html' %}
+    {% include 'base/navbar.html' %}
+    <div class="container-fluid mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 position-fixed-side mb-3">
+                {% include 'settings/setting_sidebar.html' %}
+            </div>
+            <div class="col-md-7 offset-md-3 mb-3">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for form in forms %}
+                        {% if form.title %}
+                            <h3>{{ form.title }}</h3>
+                            <hr>
+                        {% endif %}
+
+                        {% for foo in form.form %}
+                            {% if foo.field.widget.attrs.data_column %}
+                                {% if foo.field.widget.attrs.first %}
+                                    <div class="form-group {{ foo.field.widget.attrs.data_type }}">
+                                    <div class="form-row">
+                                {% endif %}
+                            <div class="col-md-{{ foo.field.widget.attrs.data_column }}">
+                                <div class="form-group">
+                                    <label for="{{ foo.id_for_label }}">
+                                        {{ foo.label }}
+                                    </label>
+                                    {{ foo }}
+                                    {% if foo.help_text %}
+                                        <small class="text-muted">{{ foo.help_text|safe }}</small>
+                                    {% endif %}
+                                    {% if foo.errors %}
+                                        <br>
+                                        {% for error in foo.errors %}
+                                            <small style="color: red;">{{ error|escape }}</small>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if foo.field.widget.attrs.last %}
+                                </div>
+                                </div>
+                            {% endif %}
+                            {% else %}
+                                <div class="form-group row {{ foo.field.widget.attrs.data_type }}">
+                                    <label for="{{ foo.id_for_label }}" class="col-sm-3 col-form-label">
+                                        {{ foo.label }}
+                                    </label>
+                                    <div class="col-sm-9">
+                                        {{ foo }}
+                                        {% if foo.help_text %}
+                                            <small class="text-muted">{{ foo.help_text|safe }}</small>
+                                        {% endif %}
+                                        {% if foo.errors %}
+                                            <br>
+                                            {% for error in foo.errors %}
+                                                <small style="color: red;">{{ error|escape }}</small>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="form-group d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary w-50 mt-4">{% trans 'Save Edits' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'base/footer.html' %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% load i18n filters %}
+<div class="profile-sidebar border">
+    <!-- SIDEBAR USERPIC -->
+    <div class="profile-userpic pt-5 pr-4 pl-4 pb-1 position-relative"
+         style="background-image: url({{ user.cover_pic.medium.url }}); background-repeat: no-repeat;background-size: cover">
+        {% if request.user.is_authenticated and user == request.user %}
+            <div class="dropdown position-absolute mt-5 m-md-0"
+                 style="top: 5px; right: 25px;">
+                <button class="btn border border-secondary rounded-0 text-dark mt-4 m-md-0" type="button"
+                        id="profileImagesUploader"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="background-color: rgba(255,255,255,0.4)">
+                    <i class="fi-xnsuxl-camera-solid"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right rounded-0" aria-labelledby="profileImagesUploader">
+                    <a class="dropdown-item" href="" data-toggle="modal"
+                       data-target="#avatarChangeForm">{% trans 'Upload Avatar' %}</a>
+                    <hr>
+                    <a class="dropdown-item" href="" data-toggle="modal"
+                       data-target="#deleteForm">{% trans 'Delete' %}</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <img src="{{ user.profile_pic.medium.url }}"
+             class="img-responsive border border-secondary w-30" alt="">
+    </div>
+    <div class="profile-usertitle">
+        <div class="profile-usertitle-name">
+            <i class="fi-owsuxs-check text-success" data-toggle="tooltip" data-placement="bottom"
+               title="Verified Profile"></i> {{ user.get_full_name }}
+        </div>
+        <div class="profile-usertitle-job">
+            <p class="card-text text-center">{{ user.bio }}</p>
+        </div>
+    </div>
+</div>

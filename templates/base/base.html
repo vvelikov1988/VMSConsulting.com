@@ -1,0 +1,170 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as CURR_LANGUAGE_CODE %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" {% if CURR_LANGUAGE_CODE.bidi %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Adding Bootstrap CSS -->
+
+    {% if CURR_LANGUAGE_CODE.bidi %}
+        <link rel="stylesheet" href="{% static 'css/material-rtl.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/material.css' %}">
+    {% endif %}
+
+
+    <link rel="stylesheet" href="{% static 'css/material-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/float-label.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+    </style>
+    {% block style %}
+
+    {% endblock %}
+
+</head>
+<body {% if CURR_LANGUAGE_CODE.bidi %}dir="rtl"{% endif %}>
+{% if messages %}
+    <div class="col-sm-12 col-sm-offset-3 p-0 m-0">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} rounded-0 m-0" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% block content %}
+
+{% endblock %}
+<div class="btn-float dropup position-fixed message-team" style="right: 20px; bottom: 25%">
+    <div class="position-relative">
+        <div class="position-absolute d-none message-tooltip text-center"
+             style="left: -200px; top: 80px;">
+            Connect with team member
+        </div>
+    </div>
+    <button aria-expanded="false" aria-haspopup="true" class="btn btn-primary btn-float"
+            type="button" data-target="#myNavdrawer" data-toggle="navdrawer">
+        <i class="material-icons p-3">message</i>
+    </button>
+</div>
+<div aria-hidden="true" class="navdrawer" id="myNavdrawer" tabindex="-1">
+    <div class="navdrawer-content">
+        <div class="navdrawer-header">
+            <a class="navbar-brand px-0" href="#">Chat</a>
+        </div>
+        <p class="navdrawer-subheader">Online</p>
+        <ul class="navdrawer-nav list-group list-group-flush border-0"></ul>
+    </div>
+</div>
+<div id="overlay"></div>
+<!-- Adding JQuery & popper Javascript -->
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/material.min.js' %}"></script>
+
+{#<script src="{% static 'js/material-design-kit.js' %}"></script>#}
+<script src="{% static 'js/friconix.js' %}"></script>
+<!-- Adding Bootstrap Javascript -->
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+<script>
+    let ChatContainer = $('#myNavdrawer .navdrawer-content .navdrawer-nav')
+    let usernameCurrent = '{{ request.user.username }}'
+    let nextDataLink = "{% url 'account:get_users' %}"
+    let flag = true
+
+    function Test(event) {
+        if (nextDataLink) {
+            $.ajax({
+                type: "GET",
+                url: nextDataLink,
+                dataType: 'json',
+                data: {},
+                success: function (resp) {
+                    nextDataLink = resp.next
+                    const results = resp.results
+                    for (let i = 0; i < results.length; i++) {
+                        let data = {
+                            'username': results[i].username,
+                            'first_name': results[i].first_name,
+                            'last_name': results[i].last_name,
+                            'user_pic': results[i].profile_pic,
+                        }
+                        createMessage(data, true)
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function createMessage(data, featching = false) {
+        if (data['username'] !== usernameCurrent) {
+            let msgListTag = document.createElement('li');
+            msgListTag.className = 'list-group-item list-group-item-action d-flex align-items-center justify-content-between';
+
+            let mediaTag = document.createElement('div');
+            mediaTag.className = 'media align-items-center';
+
+            let relativeTag = document.createElement('div');
+            relativeTag.className = 'position-relative';
+
+            let imgTag = document.createElement('img');
+            imgTag.className = 'img-fluid rounded-circle mr-1';
+            imgTag.src = data['user_pic'];
+            imgTag.width = 40
+            imgTag.height = 40
+            mediaTag.appendChild(relativeTag);
+            mediaTag.appendChild(imgTag);
+
+            let bodyTag = document.createElement('div');
+            bodyTag.className = 'media-body lh-1';
+
+            let chatTag = document.createElement('a');
+            chatTag.href = `/messages/${data['username']}/`;
+            chatTag.textContent = data['first_name'] + ' ' + data['last_name'];
+            bodyTag.appendChild(chatTag);
+
+
+            let btnTag = document.createElement('a');
+            btnTag.className = 'btn btn-white btn-sm';
+
+            let iconTag = document.createElement('i');
+            iconTag.textContent = 'message';
+            iconTag.className = 'material-icons align-middle md-18 text-muted';
+            btnTag.appendChild(iconTag);
+
+            msgListTag.appendChild(mediaTag);
+            msgListTag.appendChild(bodyTag);
+            msgListTag.appendChild(btnTag);
+            ChatContainer.append(msgListTag);
+
+        }
+    }
+
+    Test()
+
+</script>
+{% block script %}
+
+{% endblock %}
+
+</body>
+</html>

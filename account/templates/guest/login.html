@@ -1,0 +1,60 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    Login - VMSConsulting
+{% endblock %}
+
+{% block content %}
+    {% include 'base/header.html' %}
+    <div class="container content">
+        <div class="row">
+
+            <div class="card card-login mx-auto mt-5 col-md-8 col-lg-6">
+                <div class="card-body">
+                    <form action="{% url 'account:login' %}" method="post">
+                        {% csrf_token %}
+                        <h1 class="text-center">Login</h1>
+                        {% if messages %}
+                            <div class="col-sm-12 col-sm-offset-3 p-0 m-0">
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }} rounded-0 m-0" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <input type="hidden" autofocus>
+                        {% for field in form %}
+                            <div class="form-group {{ field.field.widget.attrs.data_type }}">
+                                <div class="floating-label textfield-box">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                                {% if field.errors %}
+                                    <br>
+                                    {% for error in field.errors %}
+                                        <small style="color: red;">{{ error|escape }}</small>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary btn-block mt-3">{% trans 'Login' %}</button>
+                    </form>
+                    <div class="d-block text-center mt-2">
+                        <a class="medium" href="">
+                            {% trans 'Forgot Password?' %}
+                        </a>
+                        OR Create New
+                        <a href="{% url 'account:register' %}">
+                            Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
+

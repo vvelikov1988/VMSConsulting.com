@@ -1,0 +1,203 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+    {% include 'base/header.html' %}
+    {% include 'base/navbar.html' %}
+    <div class="container border mt-5">
+        <div class="row">
+            <div class="col-12 pb-0 border-bottom">
+                <div class="d-flex py-3 align-items-center">
+                    <img class="mr-2" width="40" height="40" src="{{ receiver.profile_pic.thumbnail.url }}" alt="">
+                    <div>
+                        <h5 class="card-title">{{ receiver.get_full_name }}</h5>
+                        <h6 class="card-subtitle text-black-secondary">@{{ receiver.username }}</h6>
+                    </div>
+                </div>
+            </div>
+            <div id="ChatContainerChat" class="col-12 overflow-auto" style="height: 600px">
+                <ul id='chat-items' class="list-unstyled d-flex flex-column p-2"></ul>
+            </div>
+            <div class="col-12 border-top">
+                <form id='form' method='POST'>
+                    {% csrf_token %}
+                    <div class="input-group my-3">
+                        {% for field in form %}
+                            {{ field }}
+                        {% endfor %}
+                        <div class="input-group-append m-0">
+                            <button type='submit' class='btn btn-outline-primary'>Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'js/reconnecting-websocket.js' %}"></script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        let formDataChat = $('#form')
+        let msgInputChat = $('#id_message')
+        let chatHolderChat = $('#chat-items')
+        let ChatContainerChat = $("#ChatContainerChat")
+        let usernameCurrentChat = '{{ receiver.username }}'
+        let usernameHeaderChat = '{{ request.user.username }}'
+        let nextDataLinkChat = `{% url 'chat:api_fetcher' %}?sender=${usernameHeaderChat}&receiver=${usernameCurrentChat}`
+        let flagChat = true
+        const csrftokenChat = getCookie('csrftokenChat');
+
+
+        let locChat = window.location
+        let wsStartChat = 'ws://'
+        if (locChat.protocol === 'https:') {
+            wsStartChat = 'wss://'
+        }
+        let endpointChat = wsStartChat + locChat.host + locChat.pathname
+        let chatSocketChat = new ReconnectingWebSocket(endpointChat);
+
+        chatSocketChat.onmessage = function (e) {
+            let chatDataMsg = JSON.parse(e.data)
+            createMessageChat(chatDataMsg)
+            ChatContainerChat.scrollTop(ChatContainerChat[0].scrollHeight);
+        }
+
+        chatSocketChat.onopen = function (e) {
+            formDataChat.submit(function (event) {
+                event.preventDefault()
+                let msgTxt = msgInputChat.val()
+                if (msgTxt !== '') {
+                    let finalData = {
+                        'message': msgTxt
+                    }
+                    chatSocketChat.send(JSON.stringify(finalData))
+                    formDataChat[0].reset()
+
+                }
+            })
+        }
+
+        chatSocketChat.onerror = function (e) {
+
+        }
+
+        chatSocketChat.onclose = function (e) {
+
+        }
+
+
+        function createMessageChat(data, featching = false) {
+            let author = data['username'];
+
+            let msgListTag = document.createElement('li');
+            let imgTag = document.createElement('img');
+            let pTag = document.createElement('p');
+
+            pTag.textContent = data['message'];
+
+            pTag.setAttribute('data-toggle', 'tooltip')
+            pTag.setAttribute('title', data['timestamp'])
+            pTag.setAttribute('data-placement', 'top')
+            pTag.setAttribute('data-original-title', data['timestamp'])
+
+            imgTag.src = data['user_pic'];
+            imgTag.width = 40
+            imgTag.height = 40
+
+            if (author === usernameCurrentChat) {
+
+                msgListTag.className = 'mr-auto sent d-flex flex-row';
+                imgTag.className = 'rounded-circle';
+                pTag.className = 'rounded-pill bg-secondary p-4 mx-2 text-white w-80';
+            } else {
+                msgListTag.className = 'ml-auto replies d-flex flex-row-reverse';
+                imgTag.className = 'rounded-circle';
+                pTag.className = 'rounded-pill bg-primary-dark p-4 mx-2 text-white w-80';
+            }
+            msgListTag.appendChild(imgTag);
+            msgListTag.appendChild(pTag);
+            if (!(featching)) {
+                chatHolderChat.append(msgListTag);
+            } else {
+                chatHolderChat.prepend(msgListTag);
+            }
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        }
+
+
+        function renderChat(event) {
+            if (nextDataLinkChat) {
+                $.ajax({
+                    type: "GET",
+                    url: nextDataLinkChat,
+                    dataType: 'json',
+                    data: {},
+                    success: function (resp) {
+                        nextDataLinkChat = resp.next
+                        const results = resp.results
+                        for (let i = 0; i < results.length; i++) {
+                            let data = {
+                                'username': results[i].user.username,
+                                'message': results[i].message,
+                                'first_name': results[i].user.first_name,
+                                'last_name': results[i].user.last_name,
+                                'user_pic': results[i].user.profile_pic,
+                                'timestamp': results[i].timestamp,
+                            }
+                            createMessageChat(data, true)
+                        }
+                        ChatContainerChat.scrollTop(1);
+                        if (flagChat) {
+                            ChatContainerChat.scrollTop(ChatContainerChat[0].scrollHeight);
+                            flagChat = false
+                        }
+
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+
+        ChatContainerChat.on('scroll click', function () {
+            if (ChatContainerChat.scrollTop() === 0) {
+                renderChat()
+            }
+        });
+
+        renderChat()
+        ChatContainerChat.scrollTop(ChatContainerChat[0].scrollHeight);
+    </script>
+{% endblock %}
+

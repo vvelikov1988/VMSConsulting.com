@@ -1,0 +1,76 @@
+// Theme palette : https://material.io/design/material-theming/implementing-your-theme.html#color
+
+$primary: (
+  color: #007bff,
+  dark:  darken(#007bff, 10%),
+  light: lighten(#007bff, 10%),
+) !default;
+
+$secondary: (
+  color: #6c757d,
+        dark: darken(#6c757d, 10%),
+        light: lighten(#6c757d, 10%),
+) !default;
+
+$danger: (
+  color: #dc3545,
+        dark: darken(#dc3545, 10%),
+        light: lighten(#dc3545, 10%),
+) !default;
+
+$info: (
+  color: #17a2b8,
+        dark: darken(#17a2b8, 10%),
+        light: lighten(#17a2b8, 10%),
+) !default;
+
+$success: (
+  color: #28a745,
+        dark: darken(#28a745, 10%),
+        light: lighten(#28a745, 10%),
+) !default;
+
+$warning: (
+  color: #ffc107,
+        dark: darken(#ffc107, 10%),
+        light: lighten(#ffc107, 10%),
+) !default;
+
+$dark: (
+  color: $material-color-grey-800,
+  dark:  $material-color-grey-900,
+  light: $material-color-grey-600
+) !default;
+
+$light: (
+  color: $material-color-grey-100,
+  dark:  $material-color-grey-300,
+  light: $material-color-grey-050
+) !default;
+
+$theme-colors: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$theme-colors: map-merge(
+  (
+    primary:   $primary,
+    secondary: $secondary,
+    danger:    $danger,
+    info:      $info,
+    success:   $success,
+    warning:   $warning,
+    dark:      $dark,
+    light:     $light
+  ),
+  $theme-colors
+);
+
+$yiq-contrasted-threshold: 170 !default;
+$yiq-text-dark:            $black-primary !default;
+$yiq-text-light:           $white-primary !default;
+
+// Characters which are escaped by the escape-svg function
+$escaped-characters: (
+  ('<','%3c'),
+  ('>','%3e'),
+  ('#','%23'),
+) !default;

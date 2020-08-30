@@ -1,0 +1,95 @@
+// https://material-components.github.io/material-components-web-catalog/#/component/fab
+
+.btn-float {
+  border-radius: 50%;
+  box-shadow: map-get($btn-float-elevation-shadow, shadow);
+  height: $btn-float-size;
+  //line-height: $btn-float-size;
+  min-width: 0;
+  padding: 0;
+  width: $btn-float-size;
+
+  &:hover {
+    box-shadow: map-get($btn-float-elevation-shadow-hover, shadow);
+  }
+
+  &:active,
+  &.active {
+    box-shadow: map-get($btn-float-elevation-shadow-active, shadow);
+  }
+
+  &:disabled,
+  &.disabled {
+    box-shadow: none;
+  }
+
+  // Extended FAB
+  // stylelint-disable
+  &-extended {
+    border-radius: $btn-float-extended-border-radius;
+    height: $btn-float-extended-height;
+    line-height: $btn-float-extended-line-height;
+    padding: 0 $btn-float-extended-padding-x;
+    width: auto;
+
+    > i,
+    > [class*='material-icons'] {
+      margin-right: 0.75rem;
+      margin-left: -$spacer-sm;
+
+      &[class*="order-"] {
+        margin-right: -$spacer-sm;
+        margin-left: 0.75rem;
+      }
+    }
+  }
+  // stylelint-enable
+
+  &.btn-sm {
+    height: $btn-float-size-sm;
+    line-height: $btn-float-size-sm;
+    width: $btn-float-size-sm;
+  }
+}
+
+.btn-float-dropdown {
+  .dropdown-menu {
+    border-radius: 0;
+    margin-top: $btn-float-dropdown-inner-spacer-y;
+    min-width: $btn-float-size;
+    padding-top: 0;
+    padding-bottom: 0;
+    text-align: center;
+
+    &::before {
+      display: none;
+    }
+
+    .btn-float {
+      display: block;
+      margin-right: auto;
+      margin-bottom: $btn-float-dropdown-inner-spacer-y;
+      margin-left: auto;
+    }
+  }
+}
+
+.fab-actions {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: map-get(map-get($elevation-shadows, 12), elevation);
+
+  @media print {
+    & {
+      display: none;
+    }
+  }
+
+  & > .btn {
+    margin-top: 20px;
+  }
+}

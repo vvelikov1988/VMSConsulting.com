@@ -1,0 +1,64 @@
+{% load static i18n %}
+
+<!-- Footer -->
+
+<footer class="p-4 bg-white text-dark footer col-12 mt-5">
+    <div class="container-fluid text-center text-md-left">
+        <hr>
+        <div class="row justify-content-center">
+            <div class="col-12 mb-3 d-flex justify-content-center">
+                <ul class="nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 py-0" href="#">Support Team</a>
+                    </li>
+                    |
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 py-0" href="#">Terms & Privacy</a>
+                    </li>
+                    |
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 py-0" href="#">Legal Policies</a>
+                    </li>
+                    |
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 py-0" href="{% url 'account:home' %}">Home</a>
+                    </li>
+                    |
+                    <li class="nav-item">
+                        <a class="nav-link mx-2 py-0" href="">About</a>
+                    </li>
+                    |
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_language_info for LANGUAGE_CODE as CURR_LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <li class="nav-item dropdown p-0">
+                        <a href="" class="nav-link dropdown-toggle mx-2 py-0" data-toggle="dropdown" aria-expanded="false">
+                            <img src="{% with 'images/languages/'|add:CURR_LANGUAGE_CODE.code|add:'-flag-xs.png' as flag_image_static %}{% static flag_image_static %}{% endwith %}"
+                                 style="width: 25px; vertical-align: middle" alt="{{ CURR_LANGUAGE_CODE.code }}">
+                            {{ CURR_LANGUAGE_CODE.name_local }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ">
+                            <ul class="list-unstyled">
+                                {% for language in languages %}
+                                    <li>
+                                        <a href="{% url 'addon:set_language' %}?language={{ language.code }}"
+                                           class="dropdown-item {% if language.code == LANGUAGE_CODE %} active{% endif %}">
+                                            <img src="{% with 'images/languages/'|add:language.code|add:'-flag-xs.png' as flag_image_static %}{% static flag_image_static %}{% endwith %}"
+                                                 style="width: 25px; vertical-align: middle" class="mr-2"
+                                                 alt="{{ language.code }}">
+                                            {{ language.name_local }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <p class="m-0 text-center text-dark">Copyright &copy; Your VMSConsulting.com 2020</p>
+    </div>
+</footer>

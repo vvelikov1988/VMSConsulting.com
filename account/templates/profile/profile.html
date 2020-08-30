@@ -1,0 +1,106 @@
+{% extends 'base/base.html' %}
+{% load static i18n filters humanize %}
+
+{% block title %}
+    {{ user.get_full_name }} - VMSConsulting
+{% endblock %}
+
+
+{% block content %}
+    {% include 'base/header.html' %}
+    {% include 'base/navbar.html' %}
+    {% if not request.user.is_authenticated %}
+        <div class="container-fluid bg-light mt-5 p-0 fixed-bottom fixed-md-top">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center">
+                        <form class="d-flex align-items-center justify-content-center my-2"
+                              action="{% url 'account:login' %}"
+                              method="post">
+                            {% csrf_token %}
+                            <input type="hidden" autofocus>
+                            {% for field in login_form %}
+                                <div class="mx-2 d-flex align-items-center">
+                                    <div class="floating-label textfield-box">
+                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field }}
+                                    </div>
+                                    {% if field.errors %}
+                                        <br>
+                                        {% for error in field.errors %}
+                                            <small style="color: red;">{{ error|escape }}</small>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary">{% trans 'Login' %}</button>
+                        </form>
+                        <p class="m-0 mx-2 text-center text-md-left">OR Create New
+                            <a class="ml-1" href="{% url 'account:register' %}">
+                                Account!
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="container-fluid w-90 mt-4{% if not request.user.is_authenticated %} mt-md-5 pt-md-5{% endif %}">
+        <div class="row">
+            <div class="col-md-3 position-fixed-side mb-3">
+                {% include 'profile/profile_sidebar.html' %}
+            </div>
+            <div class="col-md-7 order-last order-md-6 offset-md-4 mb-3">
+                <div class="card card-profile--activity mb-2">
+                    <div class="card-body">
+                        <div class="media align-items-center">
+                            <img src="{{ user.profile_pic.thumbnail.url }}" alt="Person" class="rounded-circle mr-2"
+                                 width="40">
+                            <div class="media-body">
+                                <p class="card-text mb-0">
+                                    <a href="{% url 'account:profile' user.id %}">
+                                        {{ user.get_full_name }}
+                                    </a> {% trans 'has applied to' %}
+                                    <a href="">
+
+                                    </a>
+                                </p>
+                                <p class="card-text text-muted">
+
+                                </p>
+                            </div>
+
+                            {% if request.user %}
+                                <a href="#" class="btn btn-white btn-sm" data-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <i class="material-icons align-middle text-muted">more_horiz</i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="">
+                                        {% trans 'Edit Application' %}
+                                    </a>
+                                    <a class="dropdown-item" href="">
+                                        {% trans 'Delete Application' %}
+                                    </a>
+                                    <hr>
+                                    <a class="dropdown-item"
+                                       href="">
+                                        {% trans 'Show Applies' %}
+                                    </a>
+                                    <a class="dropdown-item"
+                                       href="">
+                                        {% trans 'Add Question' %}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'base/footer.html' %}
+    {% include 'profile/change_image_forms.html' %}
+{% endblock %}
+
+

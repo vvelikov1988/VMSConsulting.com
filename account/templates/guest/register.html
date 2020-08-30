@@ -1,0 +1,140 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    Registration - VMSConsulting
+{% endblock %}
+
+{% block content %}
+    {% include 'base/header.html' %}
+    <div class="container content">
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card card-register mx-auto col-md-8 rounded-0">
+                    <div class="card-body">
+                        <form action="{% url 'account:register' %}" method="post">
+                            {% csrf_token %}
+                            <h1 class="text-center">Register</h1>
+                            {% if messages %}
+                                <div class="col-sm-12 col-sm-offset-3 p-0 m-0">
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }} rounded-0 m-0" role="alert">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <input type="hidden" name="next" value="{{ request.GET.next }}" autofocus>
+                            <input type="hidden" name="user_type" value="{{ key }}">
+                            {% for field in form %}
+                                {% if field.field.widget.attrs.data_column %}
+                                    {% if field.field.widget.attrs.first %}
+                                        <div class="form-group {{ field.field.widget.attrs.data_type }}">
+                                        <div class="form-row">
+                                    {% endif %}
+                                <div class="col-md-{{ field.field.widget.attrs.data_column }}">
+                                    <div class="form-group">
+                                        <div class="floating-label textfield-box">
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                        {% if field.help_text %}
+                                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <br>
+                                            {% for error in field.errors %}
+                                                <small style="color: red;">{{ error|escape }}</small>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if field.field.widget.attrs.last %}
+                                    </div>
+                                    </div>
+                                {% endif %}
+                                {% else %}
+                                    <div class="form-group {{ field.field.widget.attrs.data_type }}">
+                                        <div class="floating-label textfield-box">
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                        </div>
+                                        {% if field.help_text %}
+                                            <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <br>
+                                            {% for error in field.errors %}
+                                                <small style="color: red;">{{ error|escape }}</small>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <button type="submit"
+                                    class="btn btn-primary btn-block">{% trans 'Register' %}</button>
+                        </form>
+                        <div class="d-block text-center mt-2">
+                            <a class="medium" href="">
+                                {% trans 'Forgot Password?' %}
+                            </a>
+                            OR Already Have
+                            <a href="{% url 'account:login' %}">
+                                Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'base/footer.html' %}
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $('#UsernameCreation').parent('.floating-label').parent('.form-group').append(`<small class='username-tagger'></small>`)
+        $("#UsernameCreation").on('change keyup paste', function () {
+            let outerThis = $(this)
+            $.ajax({
+                url: '/api/check_username/',
+                type: 'get',
+                data: {
+                    picked_username: $(this).val() ? $(this).val() : 'null'
+                },
+                success: function (response) {
+                    var selector = outerThis.parent('.floating-label').parent('.form-group').children('.username-tagger')
+                    if (outerThis.val()) {
+                        if (response.is_valid) {
+                            if (response.is_used) {
+                                selector.text('There is Account with the same Username')
+                                selector.css({
+                                    'color': 'red',
+                                    'display': 'block'
+                                })
+                            } else {
+                                selector.text('Accepted Username')
+                                selector.css({
+                                    'color': 'green',
+                                    'display': 'block'
+                                })
+                            }
+                        } else {
+                            selector.text('Username is invalid.')
+                            selector.css({
+                                'color': 'red',
+                                'display': 'block'
+                            })
+                        }
+                    } else {
+                        selector.text('')
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock %}
+

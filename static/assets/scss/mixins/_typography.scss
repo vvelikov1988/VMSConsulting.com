@@ -1,0 +1,84 @@
+@mixin typography-headline-1 {
+  font-size: $font-size-headline-1;
+  font-weight: $font-weight-headline-1;
+  letter-spacing: $letter-spacing-headline-1;
+  line-height: $line-height-headline-1;
+}
+
+@mixin typography-headline-2 {
+  font-size: $font-size-headline-2;
+  font-weight: $font-weight-headline-2;
+  letter-spacing: $letter-spacing-headline-2;
+  line-height: $line-height-headline-2;
+}
+
+@mixin typography-headline-3 {
+  font-size: $font-size-headline-3;
+  font-weight: $font-weight-headline-3;
+  letter-spacing: $letter-spacing-headline-3;
+  line-height: $line-height-headline-3;
+}
+
+@mixin typography-headline-4 {
+  font-size: $font-size-headline-4;
+  font-weight: $font-weight-headline-4;
+  letter-spacing: $letter-spacing-headline-4;
+  line-height: $line-height-headline-4;
+}
+
+@mixin typography-headline-5 {
+  font-size: $font-size-headline-5;
+  font-weight: $font-weight-headline-5;
+  letter-spacing: $letter-spacing-headline-5;
+  line-height: $line-height-headline-5;
+}
+
+@mixin typography-headline-6 {
+  font-size: $font-size-headline-6;
+  font-weight: $font-weight-headline-6;
+  letter-spacing: $letter-spacing-headline-6;
+  line-height: $line-height-headline-6;
+}
+
+@mixin typography-subtitle-1 {
+  font-size: $font-size-subtitle-1;
+  font-weight: $font-weight-subtitle-1;
+  letter-spacing: $letter-spacing-subtitle-1;
+  line-height: $line-height-subtitle-1;
+}
+
+@mixin typography-subtitle-2 {
+  font-size: $font-size-subtitle-2;
+  font-weight: $font-weight-subtitle-2;
+  letter-spacing: $letter-spacing-subtitle-2;
+  line-height: $line-height-subtitle-2;
+}
+
+@mixin typography-body-1 {
+  font-size: $font-size-body-1;
+  font-weight: $font-weight-body-1;
+  letter-spacing: $letter-spacing-body-1;
+  line-height: $line-height-body-1;
+}
+
+@mixin typography-body-2 {
+  font-size: $font-size-body-2;
+  font-weight: $font-weight-body-2;
+  letter-spacing: $letter-spacing-body-2;
+  line-height: $line-height-body-2;
+}
+
+@mixin typography-caption {
+  font-size: $font-size-caption;
+  font-weight: $font-weight-caption;
+  letter-spacing: $letter-spacing-caption;
+  line-height: $line-height-caption;
+}
+
+@mixin typography-overline {
+  font-size: $font-size-overline;
+  font-weight: $font-weight-overline;
+  letter-spacing: $letter-spacing-overline;
+  line-height: $line-height-overline;
+  text-transform: uppercase;
+}

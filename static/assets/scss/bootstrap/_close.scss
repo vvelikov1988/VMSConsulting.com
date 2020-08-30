@@ -1,0 +1,40 @@
+.close {
+  @include transition-standard(color);
+
+  appearance: none;
+  background-color: transparent;
+  background-image: none;
+  border: 0;
+  color: $close-color;
+  float: right;
+  font-size: $close-font-size;
+  font-weight: $close-font-weight;
+  line-height: 1;
+  // opacity: .5;
+  padding: 0;
+
+  @include hover-focus-active {
+    color: $close-color-hover;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+}
+
+// stylelint-disable
+button.close {
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+}
+
+a.close.disabled {
+  pointer-events: none;
+}
+// stylelint-enable

@@ -1,0 +1,18 @@
+/* Error: Undefined variable.
+ *    ,
+ * 48 |   direction: $default-direction;
+ *    |              ^^^^^^^^^^^^^^^^^^
+ *    '
+ *   base\_base.scss 48:14  @import
+ *   material.scss 16:9     root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Undefined variable.\a    \2577 \a 48 \2502    direction: $default-direction;\a    \2502               ^^^^^^^^^^^^^^^^^^\a    \2575 \a   base\\_base.scss 48:14  @import\a   material.scss 16:9     root stylesheet";
+}

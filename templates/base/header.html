@@ -1,0 +1,61 @@
+{% load static %}
+<style>
+    .header-logo {
+        -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+        -webkit-text-stroke-width: 6px;
+        -webkit-text-stroke-color: royalblue;
+        font-family: 'Audiowide', cursive;
+        font-style: italic;
+        border-radius: 1em 0 1em 0;
+        text-shadow: 1px 1px 1px #fff;
+        background-image: linear-gradient(-100deg,
+        rgba(255, 250, 150, 0.15),
+        rgba(255, 250, 150, 0.8) 100%,
+        rgba(255, 250, 150, 0.25)
+        );
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="p-4">
+                <h1 class="header-logo"><a href="{% url 'account:home' %}">VMSConsulting</a></h1>
+            </div>
+        </div>
+        {% if request.user.is_authenticated %}
+            <div class="col-md-3 offset-md-2">
+                <div class="d-flex justify-content-between border mt-5">
+                    <div class="p-3">
+                        <img src="{{ request.user.profile_pic.thumbnail.url }}" alt=""
+                             class="">
+                        {{ request.user.get_full_name }}
+
+                    </div>
+                    <div class="d-flex flex-column">
+                        <a class="align-self-start mb-auto" href="{% url 'account:logout' %}">
+                            <i class="fi-xnsuxl-sign-out-solid"></i> Logout
+                        </a>
+                        <a class="mt-auto" href="{% url 'account:update-profile' %}">
+                            <i class="fi-xnsuxl-setting-solid"></i> Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-2 offset-md-3">
+                <div class="border mt-5 p-2">
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'account:login' %}" class="btn btn-primary mx-1 border-0 rounded-0 my-1"
+                           style="background-color: #0778e9">
+                            Login
+                        </a>
+                        <a href="{% url 'account:register' %}" class="btn btn-primary mx-1 border-0 rounded-0 my-1"
+                           style="background-color: #1da1f2">
+                            Register
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

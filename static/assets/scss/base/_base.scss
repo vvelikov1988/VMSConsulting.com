@@ -1,0 +1,444 @@
+:root {
+
+  // Custom variable values only support SassScript inside `#{}`.
+  @each $color, $value in $colors {
+    --#{$color}: #{$value};
+  }
+
+  @each $color, $values in $theme-colors {
+    @each $level, $value in $values {
+      @if $level=='color' {
+        --#{$color}: #{$value};
+      }
+
+      @else {
+        --#{$color}-#{$level}: #{$value};
+      }
+    }
+  }
+
+  @each $bp, $value in $grid-breakpoints {
+    --breakpoint-#{$bp}: #{$value};
+  }
+
+  // Use `inspect` for lists so that quoted items keep the quotes.
+  // See https://github.com/sass/sass/issues/2383#issuecomment-336349172
+  --font-family-sans-serif: #{inspect($font-family-sans-serif)};
+  --font-family-monospace: #{inspect($font-family-monospace)};
+  --font-family-material-icons: #{inspect($material-icon-font-family)};
+}
+
+// stylelint-disable declaration-no-important, selector-no-qualifying-type, property-no-vendor-prefix
+
+// Box sizing
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: $webkit-tap-highlight-color;
+  direction: $default-direction;
+  @if ($enable-smooth-scroll) {
+    scroll-behavior: smooth;
+
+    @media (prefers-reduced-motion: reduce) {
+      & {
+        scroll-behavior: auto;
+      }
+    }
+  }
+}
+
+article,
+aside,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+
+body {
+  @include text-align(#{$left-way});
+
+  background-color: $body-bg;
+  color: $body-color;
+  font-family: $font-family-base;
+  font-size: ($font-size-base * 0.875);
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  margin: 0;
+}
+
+[tabindex='-1']:focus:not(:focus-visible) {
+  outline: 0 !important;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: $headings-margin-y;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: $paragraph-margin-y;
+}
+
+abbr[title],
+abbr[data-original-title] {
+  border-bottom: 0;
+  cursor: help;
+  text-decoration: underline;
+  text-decoration: underline dotted;
+  text-decoration-skip-ink: none;
+}
+
+address {
+  font-style: normal;
+  line-height: inherit;
+  margin-bottom: $paragraph-margin-y;
+}
+
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: $paragraph-margin-y;
+}
+
+ol ol,
+ol ul,
+ul ol,
+ul ul {
+  margin-bottom: 0;
+}
+
+dt {
+  font-weight: $dt-font-weight;
+}
+
+dd {
+  margin-bottom: $headings-margin-y;
+  margin-#{$left-way}: 0;
+}
+
+blockquote {
+  margin: 0 0 $paragraph-margin-y;
+}
+
+b,
+strong {
+  font-weight: $font-weight-bold;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+//
+// Links
+//
+
+a {
+  background-color: transparent;
+  color: $link-color;
+  text-decoration: $link-decoration;
+
+  &:hover {
+    color: $link-color-hover;
+    text-decoration: $link-decoration-hover;
+  }
+}
+
+a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+//
+// Code
+//
+
+pre,
+code,
+kbd,
+samp {
+  font-family: $font-family-monospace;
+  font-size: 1em;
+}
+
+pre {
+  display: block;
+  margin-top: 0;
+  margin-bottom: $pre-margin-y;
+  overflow: auto;
+  -ms-overflow-style: scrollbar;
+  user-select: all;
+}
+
+figure {
+  margin: 0 0 $paragraph-margin-y;
+}
+
+// Images
+
+img {
+  border-style: none;
+  vertical-align: middle;
+}
+
+svg {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+// Tables
+
+table {
+  border-collapse: collapse;
+}
+
+caption {
+  @include text-align(#{$left-way});
+  @include typography-caption;
+
+  caption-side: bottom;
+  color: $table-caption-color;
+  padding: $table-thead-padding-y $table-cell-padding-x-alt;
+}
+
+th {
+  @include text-align(#{$left-way}); // inherit
+}
+
+//
+// Forms
+//
+
+label {
+  @include typography-caption;
+
+  color: $textfield-hint-color;
+  display: inline-block;
+  user-select: none;
+}
+
+button {
+  border-radius: 0;
+}
+
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+[role='button'] {
+  cursor: pointer;
+}
+
+select {
+  word-wrap: normal;
+
+  &[multiple],
+  &[size] {
+    overflow: auto;
+  }
+}
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+}
+
+@if $enable-pointer-cursor-for-buttons {
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+  }
+
+  .btn:not(.disabled):not(:disabled),
+  input:enabled + label:hover {
+    cursor: pointer;
+  }
+}
+
+button::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+textarea {
+  overflow: auto;
+  resize: vertical;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+}
+
+legend {
+  @include typography-headline-6;
+
+  color: inherit;
+  display: block;
+  margin-bottom: $headings-margin-y;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal;
+  width: 100%;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type='search'] {
+  -webkit-appearance: none;
+  outline-offset: -2px;
+}
+
+[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+//
+// Correct element displays
+//
+
+output {
+  display: inline-block;
+}
+
+summary {
+  cursor: pointer;
+  display: list-item;
+}
+
+template {
+  display: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+// Additions
+
+mark {
+  background-color: $mark-bg;
+  color: $mark-color;
+}
+
+@at-root {
+
+  // stylelint-disable-next-line at-rule-no-vendor-prefix
+  @-ms-viewport {
+    width: device-width;
+  }
+}
+
+dfn {
+  font-style: italic;
+}
+
+::selection {
+  background: rgba(theme-color('primary'), $overlay-selected-white-opacity); // Material Addition
+}
+
+.disabled:hover,
+:disabled:hover {
+  cursor: default;
+}

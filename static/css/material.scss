@@ -1,0 +1,75 @@
+@import '../assets/scss/colors';
+@import '../assets/scss/functions';
+@import '../assets/scss/variables';
+
+$left-way: left;
+$right-way: right;
+
+$default-direction: ltr;
+
+
+@import '../assets/scss/mixins';
+
+// Base CSS
+
+@import '../assets/scss/base/base'; // root + reboot
+@import '../assets/scss/base/grid';
+@import '../assets/scss/base/typography'; // type
+
+// Bootstrap components
+// Components covered in Bootstrap's css but not in Material design
+
+@import '../assets/scss/bootstrap/alert';
+@import '../assets/scss/bootstrap/badge';
+@import '../assets/scss/bootstrap/breadcrumb';
+@import '../assets/scss/bootstrap/carousel';
+@import '../assets/scss/bootstrap/close';
+@import '../assets/scss/bootstrap/code';
+@import '../assets/scss/bootstrap/forms';
+@import '../assets/scss/bootstrap/images';
+@import '../assets/scss/bootstrap/jumbotron';
+@import '../assets/scss/bootstrap/media';
+@import '../assets/scss/bootstrap/nav';
+@import '../assets/scss/bootstrap/pagination';
+@import '../assets/scss/bootstrap/popover';
+@import '../assets/scss/bootstrap/responsive-embed';
+@import '../assets/scss/bootstrap/scrollspy';
+@import '../assets/scss/bootstrap/transitions';
+
+// Material components
+// Components covered in Material design (https://material.google.com/components)
+
+@import '../assets/scss/material/buttons';
+@import '../assets/scss/material/button-flat';
+@import '../assets/scss/material/button-float';
+@import '../assets/scss/material/button-group';
+@import '../assets/scss/material/card';
+@import '../assets/scss/material/chip';
+@import '../assets/scss/material/data-table'; // tables
+@import '../assets/scss/material/dialog'; // modal
+@import '../assets/scss/material/expansion-panel'; // list-group
+@import '../assets/scss/material/menu'; // dropdown
+@import '../assets/scss/material/navdrawer';
+@import '../assets/scss/material/picker';
+@import '../assets/scss/material/progress';
+@import '../assets/scss/material/progress-circular'; // spinners
+@import '../assets/scss/material/selection-control'; // custom-forms
+@import '../assets/scss/material/sliders';
+@import '../assets/scss/material/snackbars'; // toasts
+@import '../assets/scss/material/stepper';
+@import '../assets/scss/material/tab';
+@import '../assets/scss/material/text-field';
+@import '../assets/scss/material/text-field-box';
+@import '../assets/scss/material/text-field-floating-label';
+@import '../assets/scss/material/text-field-input-group'; // input-group
+@import '../assets/scss/material/toolbar'; // navbar
+@import '../assets/scss/material/tooltip';
+
+// Utilities
+@import '../assets/scss/utilities';
+
+
+// Very basic print styles
+
+@import '../assets/scss/print';
+

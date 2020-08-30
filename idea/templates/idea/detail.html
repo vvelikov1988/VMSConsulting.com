@@ -1,0 +1,161 @@
+{% extends 'base/base.html' %}
+{% load static i18n humanize %}
+
+{% block title %}
+    {{ idea }} - VMSConsulting
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+    {% include 'base/header.html' %}
+    {% include 'base/navbar.html' %}
+    <div class="container pt-3">
+        <div class="mb-3">
+            <h1 class="h2 mb-0">{{ idea.title }}</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb p-0">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'account:home' %}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'idea:home' %}">Idea</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Idea no. {{ idea.id }}
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div id="applicationSlidShow" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="{{ idea.image.large.url }}"
+                                     alt="{{ forloop.counter }} slide">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded-0 mb-3">
+                    <div class="card-header">
+                        <h4 class="card-title">{% trans 'Description' %}</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{ idea.description|safe }}
+                        </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4 class="card-title">{% trans 'More Details' %}</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled m-0">
+                            <li class="d-flex mb-1">
+                                <i class="material-icons md-18 align-middle mr-2 text-muted">schedule</i>
+                                <span>{{ idea.created_at|timesince }}</span>
+                            </li>
+                            <li class="d-flex">
+                                <i class="material-icons md-18 align-middle mr-2 text-muted">label</i>
+                                <span>{{ idea.get_topic_str }}</span>
+                            </li>
+                            <li class="d-flex">
+                                <i class="material-icons md-18 align-middle mr-2 text-muted">account_circle</i>
+                                <span>{{ idea.user.get_full_name }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4 class="card-title">Comments</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            {% if request.user.is_authenticated %}
+                                <div class="tab-pane" id="add-comment">
+                                    <form action="{% url 'idea:detail' idea.id %}" method="post" class="form-horizontal"
+                                          id="commentForm" role="form">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="addComment" class="col-sm-2 control-label">Comment</label>
+                                            <div class="col-12">
+                                                {% for fields in comment_form %}
+                                                    {{ fields }}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button class="btn btn-success btn-circle text-uppercase"
+                                                            type="submit"
+                                                            id="submitComment"><span
+                                                            class="glyphicon glyphicon-send"></span>
+                                                        Add Comment
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endif %}
+                            {% if idea.comments.all %}
+                                {% for comment in idea.comments.all %}
+                                    <div class="media border p-3 mt-2">
+                                        <img src="{{ comment.user.profile_pic.thumbnail.url }}" alt="John Doe"
+                                             class="mr-3 mt-3 rounded-circle"
+                                             style="width:60px;">
+                                        <div class="media-body">
+                                            <h4>{{ comment.user.get_full_name }} <span>@{{ comment.user }}</span></h4>
+
+                                            <p>{{ comment.text }}</p>
+                                            <small><i>Added on {{ comment.created_at|naturaltime }}</i></small>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            {% else %}
+                                <p class="mt-2">No Comments Yet! Add the First One</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if idea.user == request.user %}
+                <div class="col-md-4 order-first order-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>More Settings:</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <a class="col-6 btn btn-primary rounded-0 border"
+                                   href="{% url 'idea:edit' idea.id %}">
+                                    Edit Idea
+                                </a>
+                                <a class="col-6 btn btn-danger rounded-0 border"
+                                   href="{% url 'idea:delete' idea.id %}">
+                                    Delete Idea
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'base/footer.html' %}
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

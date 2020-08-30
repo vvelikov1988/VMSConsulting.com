@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+    {% include 'base/header.html' %}
+    {% include 'base/navbar.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <h3>Add New Idea</h3>
+                <form action="{% url 'idea:add' %}" method="post">
+                    {% csrf_token %}
+                    {{ idea_form }}
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'base/footer.html' %}
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

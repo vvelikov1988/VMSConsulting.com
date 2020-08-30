@@ -1,0 +1,57 @@
+{% load static i18n %}
+
+<nav class="navbar navbar-expand-md navbar-light bg-white text-dark border w-90 justify-content-center mx-auto">
+    <a class="navbar-toggler border-0" id="show-sidebar-small" href="">Panel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a href="{% url 'account:home' %}" class="nav-link">
+                    Home
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Explore
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Ideas</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Team Member</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav mx-auto position-relative">
+            <li class="nav-item text-center position-absolute bg-primary-dark text-white font-weight-bolder p-4 mt-n5 border border-warning"
+                style="width: 250px; top: 0">
+                <a href="" class="text-white">
+                    <div>Apply Now</div>
+                    <div>Be one of the team Member</div>
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="{% url 'account:home' %}" class="nav-link">
+                    About Us
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'account:home' %}" class="nav-link">
+                    Contact Us
+                </a>
+            </li>
+            <form action="" method="get"
+                  class="form-inline my-2 my-lg-0 searchform navbar-form mw-100 position-relative" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control py-2 px-4 bg-dark text-white" placeholder="Search by Title"
+                           name="q">
+                </div>
+            </form>
+        </ul>
+    </div>
+</nav>
